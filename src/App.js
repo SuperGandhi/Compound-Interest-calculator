@@ -5,7 +5,7 @@ import Container from './components/Container'
 import Input from './components/Input'
 import Section from './components/Section'
 import Balance from './components/Balance'
-
+import * as Yup from  'yup'
 
 const compoundInterest = (deposit, contribution, years, rate) =>{
   let total = deposit
@@ -41,13 +41,19 @@ const App= () => {
           rate: '',
         }}
         onSubmit={handleSubmit}
+        validationSchema={Yup.object({
+          deposit: Yup.number().required('Required').typeError('Must be a number'),
+          contribution: Yup.number().required('Required').typeError('Must be a number'),
+          years: Yup.number().required('Required').typeError('Must be a number'),
+          rate: Yup.number().required('Required').typeError('Must be a number').min(0, 'The minimum value is 0').max(1, 'The maximum value is one'),
+        })}
         >
           <Form>
-            <Input name="deposit" label="Deposito Inicial" />
-            <Input name="contribution" label="Contribución Anual" />
-            <Input name="years" label="Años" />
-            <Input name="rate" label="Interés estimado" />
-            <Button>Calcular</Button>
+            <Input name="deposit" label="Initial Deposit" />
+            <Input name="contribution" label="Annual Contribution" />
+            <Input name="years" label="Years" />
+            <Input name="rate" label="Estimated interest" />
+            <Button type="submit">Calculate</Button>
           </Form>
         </Formik>
         {balance !== '' ? <Balance>Balance final:{balance}</Balance>: null}
